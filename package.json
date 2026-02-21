@@ -1,6 +1,6 @@
 {
   "name": "@peter_marklund/json",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A convenient way to work with JSON using JavaScript in the terminal",
   "main": "index.js",
   "scripts": {
