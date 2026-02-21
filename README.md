@@ -1,6 +1,6 @@
 # @peter_marklund/json
 
-An npm package that provides a convenient way to work with JSON using JavaScript in the terminal.
+An npm package that provides a CLI for using JavaScript to work with JSON in the terminal. For those of us who like `jq` but prefer using JavaScript for more involved JSON tasks.
 
 ## Installation
 
@@ -10,7 +10,7 @@ npm install @peter_marklund/json -g
 
 ## Usage
 
-The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `pick`, `pickBy`, `mapValues`, `sum` etc.) are available as are a number of customer [helper functions](src/helpers.js).
+The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `pick`, `pickBy`, `mapValues`, `sum` etc.) are available as are a number of [helper functions](src/helpers.js). It is also possible to provide custom JavaScript helper functions via the `JSON_HELPERS_PATH` environment variable.
 
 ```sh
 # Get the value at a path
@@ -138,6 +138,10 @@ cat test/input/log-with-json.log | json
 #   },
 #   ...
 # ]
+
+# Using custom helper functions via the JSON_HELPERS_PATH env var and a javascript module with exported functions
+echo '{"values1": [1, 2, 3, 4], "values2": [3, 5, 1, 11]}' | JSON_HELPERS_PATH="$(pwd)/test/custom-helpers.js" json 'correlation(data.values1, data.values2)'
+# 0.5976143046671968
 ```
 
 ## Running the Tests
@@ -157,4 +161,5 @@ npm publish --access public
 
 # Prior Art
 
+* [jq](https://github.com/jqlang/jq) - the standard for processing JSON in the terminal
 * [trentm/json](https://github.com/trentm/json) - nice library with [very good documentation](https://trentm.com/json/)

@@ -64,6 +64,11 @@
             "name": "log_with_json_input",
             "command": "cat test/input/log-with-json.log | json 'sum(data.map(d => d.duration_ms))'",
             "expected": "141"
+        },
+        {
+            "name": "custom_helper_functions",
+            "command": "echo '{\"values1\": [1, 2, 3, 4], \"values2\": [3, 5, 1, 11]}' | JSON_HELPERS_PATH=\"$(pwd)/test/custom-helpers.js\" json 'round(correlation(data.values1, data.values2), 3)'",
+            "expected": "0.598"
         }
     ]
 }

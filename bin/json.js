@@ -40,9 +40,14 @@
 
 const fs = require("fs");
 const readline = require("readline");
+
 const _ = require("lodash");
 Object.assign(global, require("lodash"));
 Object.assign(global, require("../src/helpers.js"));
+if (process.env.JSON_HELPERS_PATH) {
+    Object.assign(global, require(process.env.JSON_HELPERS_PATH));
+}
+
 const { diff } = require("object-diffy");
 const { colorize } = require("json-colorizer");
 const stringify = require('fast-json-stable-stringify')
