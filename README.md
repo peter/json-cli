@@ -1,6 +1,6 @@
 # @peter_marklund/json
 
-An npm package that provides a CLI for using JavaScript to work with JSON in the terminal. For those of us who like `jq` but prefer using JavaScript for more involved JSON tasks.
+An npm package that provides a convenient way to use JavaScript to work with JSON in the terminal. This tool is for those of us who like `jq` but prefer JavaScript over `jq` syntax.
 
 ## Installation
 
