@@ -24,6 +24,11 @@
             "name": "file_path_arg",
             "command": "json .foo test/input/basic.json",
             "expected": "1"
+        },
+        {
+            "name": "lodash_sum",
+            "command": "cat test/input/basic.json | json 'sum(data.data.map(i => i.value))'",
+            "expected": "600"
         }
     ]
 }
