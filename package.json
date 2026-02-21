@@ -1,5 +1,5 @@
 {
-  "name": "jsoncli",
+  "name": "json-cli",
   "version": "0.0.1",
   "description": "A convenient way to work with JSON using JavaScript in the terminal",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/peter/jsoncli.git"
+    "url": "git+https://github.com/peter/json-cli.git"
   },
   "bin": {
     "json": "./bin/json.js"
@@ -18,9 +18,9 @@
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/peter/jsoncli/issues"
+    "url": "https://github.com/peter/json-cli/issues"
   },
-  "homepage": "https://github.com/peter/jsoncli#readme",
+  "homepage": "https://github.com/peter/json-cli#readme",
   "dependencies": {
     "json-colorizer": "^3.0.1",
     "lodash": "^4.17.23",
