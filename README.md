@@ -14,6 +14,8 @@ npm install @peter_marklund/json -g
 
 ## Usage
 
+The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `mapValues`, `sum` etc.) are available as are a number of customer [helper functions](src/helpers.js).
+
 ```sh
 # Get the value at a path
 echo '{"foo": "1"}' | json .foo
