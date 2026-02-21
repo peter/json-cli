@@ -29,6 +29,26 @@
             "name": "lodash_sum",
             "command": "cat test/input/basic.json | json 'sum(data.data.map(i => i.value))'",
             "expected": "600"
+        },
+        {
+            "name": "object_keys",
+            "command": "cat test/input/basic.json | json 'Object.keys(data)'",
+            "expected": "[\"foo\", \"bar\", \"baz\", \"nested\", \"data\"]"
+        },
+        {
+            "name": "array_length",
+            "command": "cat test/input/basic.json | json '.data.length'",
+            "expected": "3"
+        },
+        {
+            "name": "flatten_json",
+            "command": "cat test/input/basic.json | json 'flattenJson(data)'",
+            "expected": "{\"foo\": 1, \"bar\": \"Hello world\", \"baz\": false, \"nested.foo.bar\": \"nested value\", \"data.0.id\": 1, \"data.0.name\": \"Item 1\", \"data.0.value\": 100, \"data.1.id\": 2, \"data.1.name\": \"Item 2\", \"data.1.value\": 200, \"data.2.id\": 3, \"data.2.name\": \"Item 3\", \"data.2.value\": 300}"
+        },
+        {
+            "name": "stats",
+            "command": "cat test/input/basic.json | json 'pick(stats(data.data.map(i => i.value)), [\"min\", \"max\", \"avg\", \"p50\", \"p90\"])'",
+            "expected": "{\"min\": 100, \"max\": 300, \"avg\": 200, \"p50\": 200, \"p90\": 300}"
         }
     ]
 }
