@@ -14,7 +14,8 @@ The JSON data is typically passed to the `json` command via stdin but can also b
 
 Environment variables for configuration:
 
-* `JSON_OUTPUT` - determines how output is serialized and the default value is `stringify_stable_pretty`. Valid values are: `stringify_stable`, `stringify_default`, `stringify_stable_pretty`, `stringify_default_pretty`, `raw`, `jsonl`
+* `JSON_OUTPUT` - determines how output is serialized and the default value is `json_pretty`. Valid values are: `json`, `json_pretty`, `raw`, `jsonl`
+* `JSON_STRINGIFIER` - what function/library is used to stringify. By Default `fast-json-stable-stringify` is used to yield stable/sorted output but this can be changed to `JSON.stringify` by using `JSON_STRINGIFIER=default`
 * `JSON_HELPERS_PATH` - path to a JavaScript file that exports custom helper functions
 
 ```sh

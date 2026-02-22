@@ -66,13 +66,13 @@
             "expected": "0.598"
         },
         {
-            "name": "json_output_stringify_default",
-            "command": "cat test/input/basic.json | JSON_OUTPUT=stringify_default json '.data.map(d => pick(d, [\"value\"]))'",
+            "name": "json_stringifier_default",
+            "command": "cat test/input/basic.json | JSON_STRINGIFIER=default json '.data.map(d => pick(d, [\"value\"]))'",
             "expected": "[{\"value\":100},{\"value\":200},{\"value\":300}]"
         },
         {
-            "name": "json_output_stringify_stable",
-            "command": "cat test/input/basic.json | JSON_OUTPUT=stringify_stable json",
+            "name": "json_output_json",
+            "command": "cat test/input/basic.json | JSON_OUTPUT=json json",
             "expected": "{\"bar\":\"Hello world\",\"baz\":false,\"data\":[{\"id\":1,\"name\":\"Item 1\",\"value\":100},{\"id\":2,\"name\":\"Item 2\",\"value\":200},{\"id\":3,\"name\":\"Item 3\",\"value\":300}],\"foo\":1,\"nested\":{\"foo\":{\"bar\":\"nested value\"}}}"
         },
         {
