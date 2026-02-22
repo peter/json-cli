@@ -10,7 +10,7 @@ npm install @peter_marklund/json -g
 
 ## Usage
 
-The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `pick`, `pickBy`, `mapValues`, `sum` etc.) are available as are a number of [helper functions](src/helpers.js). It is also possible to provide custom JavaScript helper functions via the `JSON_HELPERS_PATH` environment variable.
+The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `pick`, `pickBy`, `groupBy`, `mapValues`, `sum` etc.) are available as are a number of [helper functions](src/helpers.js). It is also possible to provide custom JavaScript helper functions via the `JSON_HELPERS_PATH` environment variable.
 
 Environment variables for configuration:
 
@@ -92,6 +92,19 @@ cat test/input/basic.json | json 'data.data.map(d => d.value)' | json 'stats(dat
 #   "sum": 600
 # }
 
+# Use lodash groupBy with stats:
+cat test/input/data.json| json 'groupBy(data, "name")' | json 'mapValues(data, items => items.map(i => i.value))' | json 'mapValues(data, d => pick(stats(d), ["p90"]))'
+# {
+#   "Name 1": {
+#     "p90": 370
+#   },
+#   "Name 2": {
+#     "p90": 290
+#   },
+#   "Name 3": {
+#     "p90": 500
+#   }
+# }
 
 # Colorized pretty printing is the default
 cat test/input/array.json | json           
@@ -114,11 +127,11 @@ cat test/input/array.json | json
 # ]
 
 # Without pretty printing (single line):
-cat test/input/basic.json | PRETTY=false json
+cat test/input/basic.json | JSON_OUTPUT=stringify_stable json
 # {"bar":"Hello world","baz":false,"data":[{"id":1,"name":"Item 1","value":100},{"id":2,"name":"Item 2","value":200},{"id":3,"name":"Item 3","value":300}],"foo":1,"nested":{"foo":{"bar":"nested value"}}}
 
 # JSONL output (for an array with one JSON object per line)
-cat test/input/array.json | JSONL=true json 
+cat test/input/array.json | JSON_OUTPUT=jsonl json 
 # {"id":1,"name":"Item 1","value":100}
 # {"id":2,"name":"Item 2","value":200}
 # {"id":3,"name":"Item 3","value":300}
