@@ -1,4 +1,4 @@
-# @peter_marklund/json
+# json - JavaScript based JSON CLI
 
 An npm package that provides a convenient way to use JavaScript to work with JSON in the terminal. This tool is for those of us who like `jq` but prefer JavaScript over `jq` syntax.
 
