@@ -18,11 +18,15 @@ Environment variables for configuration:
 * `JSON_STRINGIFIER` - what function/library is used to stringify. The default value is `stable` and this means the `fast-json-stable-stringify` library is used to yield stable/sorted output but this can be changed to `JSON.stringify` by setting `JSON_STRINGIFIER=default`
 * `JSON_HELPERS_PATH` - path to a JavaScript file that exports custom helper functions
 
-```sh
-# Get the value at a path
-echo '{"foo": "1"}' | json .foo
+Get the value at a path:
 
-# Get the keys of the JSON data
+```sh
+echo '{"foo": "1"}' | json .foo
+```
+
+Get the keys of a JSON object:
+
+```sh
 cat test/input/basic.json | json 'Object.keys(data)'                               
 # [
 #   "foo",
@@ -31,12 +35,18 @@ cat test/input/basic.json | json 'Object.keys(data)'
 #   "nested",
 #   "data"
 # ]
+```
 
-# Get the length of an array:
+Get the length of an array:
+
+```sh
 cat test/input/basic.json | json '.data.length'     
 # 3
+```
 
-# Use lodash functions
+Use lodash functions:
+
+```sh
 cat test/input/basic.json | json '.data.map(d => pick(d, ["value"]))'
 # [
 #   {
@@ -49,8 +59,11 @@ cat test/input/basic.json | json '.data.map(d => pick(d, ["value"]))'
 #     "value": 300
 #   }
 # ]
+```
 
-# Use the flattenJson helper to find the path of a deeply nested value:
+Use the flattenJson helper to find the path of a deeply nested value:
+
+```sh
 cat test/input/basic.json | json 'flattenJson(data)'
 # {
 #   "bar": "Hello world",
@@ -67,8 +80,11 @@ cat test/input/basic.json | json 'flattenJson(data)'
 #   "foo": 1,
 #   "nested.foo.bar": "nested value"
 # }
+```
 
-# Use the stats helper function to get min/max/avg/median/p90 etc. for numerical values
+Use the stats helper function to get min/max/avg/median/p90 etc. for numerical values
+
+```sh
 cat test/input/basic.json | json 'data.data.map(d => d.value)' | json 'stats(data)'
 # {
 #   "avg": 200,
@@ -92,8 +108,11 @@ cat test/input/basic.json | json 'data.data.map(d => d.value)' | json 'stats(dat
 #   "stdDev": 81.64965809277261,
 #   "sum": 600
 # }
+```
 
-# Use lodash groupBy with stats:
+Use lodash groupBy with stats:
+
+```sh
 cat test/input/data.json| json 'groupBy(data, "name")' | json 'mapValues(data, items => items.map(i => i.value))' | json 'mapValues(data, d => pick(stats(d), ["p90"]))'
 # {
 #   "Name 1": {
@@ -106,8 +125,11 @@ cat test/input/data.json| json 'groupBy(data, "name")' | json 'mapValues(data, i
 #     "p90": 500
 #   }
 # }
+```
 
-# Colorized pretty printing is the default
+Colorized pretty printing is the default
+
+```sh
 cat test/input/array.json | json           
 # [
 #   {
@@ -126,21 +148,33 @@ cat test/input/array.json | json
 #     "value": 300
 #   }
 # ]
+```
 
-# Without pretty printing (single line):
-cat test/input/basic.json | JSON_OUTPUT=stringify_stable json
+Without pretty printing (single line):
+
+```sh
+cat test/input/basic.json | JSON_OUTPUT=json json
 # {"bar":"Hello world","baz":false,"data":[{"id":1,"name":"Item 1","value":100},{"id":2,"name":"Item 2","value":200},{"id":3,"name":"Item 3","value":300}],"foo":1,"nested":{"foo":{"bar":"nested value"}}}
+```
 
-# JSONL output (for an array with one JSON object per line)
+JSONL output (for an array with one JSON object per line)
+
+```sh
 cat test/input/array.json | JSON_OUTPUT=jsonl json 
 # {"id":1,"name":"Item 1","value":100}
 # {"id":2,"name":"Item 2","value":200}
 # {"id":3,"name":"Item 3","value":300}
+```
 
-# The json command can take JSONL as input as well
+The json command can take JSONL as input as well:
+
+```sh
 cat test/input/array.jsonl | json
+```
 
-# The json command can also parse JSON data at the end of log lines:
+The json command can also parse JSON data at the end of log lines:
+
+```sh
 cat test/input/log-with-json.log | json
 # [
 #   {
@@ -157,8 +191,11 @@ cat test/input/log-with-json.log | json
 #   },
 #   ...
 # ]
+```
 
-# Using custom helper functions via the JSON_HELPERS_PATH env var and a javascript module with exported functions
+Using custom helper functions via the JSON_HELPERS_PATH env var and a javascript module with exported functions:
+
+```sh
 echo '{"values1": [1, 2, 3, 4], "values2": [3, 5, 1, 11]}' | JSON_HELPERS_PATH="$(pwd)/test/custom-helpers.js" json 'correlation(data.values1, data.values2)'
 # 0.5976143046671968
 ```
