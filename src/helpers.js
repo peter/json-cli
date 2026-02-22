@@ -1,3 +1,5 @@
+const fastStableStringify = require('fast-json-stable-stringify')
+
 function flattenJson(data, path = []) {
     if (Array.isArray(data)) {
         return data.reduce((acc, value, index) => {
@@ -111,10 +113,22 @@ function stats(values) {
     };
 }
 
+function jsonStringify(data, stringifier = "stable") {
+    if (stringifier === "stable") {
+        return fastStableStringify(data)
+    } else if (stringifier === "default") {
+        return JSON.stringify(data)
+    } else {
+        throw new Error(`Invalid stringifier: ${stringifier}`)
+    }
+}
+  
+
 module.exports = {
     flattenJson,
     sizeOfObject,
     base64Decode,
     base64Encode,
     stats,
+    jsonStringify,
 }

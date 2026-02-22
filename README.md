@@ -12,6 +12,11 @@ npm install @peter_marklund/json -g
 
 The JSON data is typically passed to the `json` command via stdin but can also be passed as a file path via the second argument. The first argument to the `json` command is a string with JavaScript code to be evaluated. All [lodash](https://lodash.com/docs/4.17.23) functions (i.e. `pick`, `pickBy`, `mapValues`, `sum` etc.) are available as are a number of [helper functions](src/helpers.js). It is also possible to provide custom JavaScript helper functions via the `JSON_HELPERS_PATH` environment variable.
 
+Environment variables for configuration:
+
+* `JSON_OUTPUT` - determines how output is serialized and the default value is `stringify_stable_pretty`. Valid values are: `stringify_stable`, `stringify_default`, `stringify_stable_pretty`, `stringify_default_pretty`, `raw`, `jsonl`
+* `JSON_HELPERS_PATH` - path to a JavaScript file that exports custom helper functions
+
 ```sh
 # Get the value at a path
 echo '{"foo": "1"}' | json .foo

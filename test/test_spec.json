@@ -56,11 +56,6 @@
             "expected": "[{\"id\":1,\"name\":\"Item 1\",\"value\":100},{\"id\":2,\"name\":\"Item 2\",\"value\":200},{\"id\":3,\"name\":\"Item 3\",\"value\":300}]"
         },
         {
-            "name": "jsonl_output",
-            "command": "cat test/input/array.jsonl | JSONL=true json",
-            "expected": "{\"id\":1,\"name\":\"Item 1\",\"value\":100}\n{\"id\":2,\"name\":\"Item 2\",\"value\":200}\n{\"id\":3,\"name\":\"Item 3\",\"value\":300}"
-        },
-        {
             "name": "log_with_json_input",
             "command": "cat test/input/log-with-json.log | json 'sum(data.map(d => d.duration_ms))'",
             "expected": "141"
@@ -69,6 +64,26 @@
             "name": "custom_helper_functions",
             "command": "echo '{\"values1\": [1, 2, 3, 4], \"values2\": [3, 5, 1, 11]}' | JSON_HELPERS_PATH=\"$(pwd)/test/custom-helpers.js\" json 'round(correlation(data.values1, data.values2), 3)'",
             "expected": "0.598"
+        },
+        {
+            "name": "json_output_stringify_default",
+            "command": "cat test/input/basic.json | JSON_OUTPUT=stringify_default json '.data.map(d => pick(d, [\"value\"]))'",
+            "expected": "[{\"value\":100},{\"value\":200},{\"value\":300}]"
+        },
+        {
+            "name": "json_output_stringify_stable",
+            "command": "cat test/input/basic.json | JSON_OUTPUT=stringify_stable json",
+            "expected": "{\"bar\":\"Hello world\",\"baz\":false,\"data\":[{\"id\":1,\"name\":\"Item 1\",\"value\":100},{\"id\":2,\"name\":\"Item 2\",\"value\":200},{\"id\":3,\"name\":\"Item 3\",\"value\":300}],\"foo\":1,\"nested\":{\"foo\":{\"bar\":\"nested value\"}}}"
+        },
+        {
+            "name": "json_output_raw",
+            "command": "cat test/input/basic.json | JSON_OUTPUT=raw json '.data.map(d => d.value)'",
+            "expected": "[ 100,200,300 ]"
+        },
+        {
+            "name": "json_output_jsonl",
+            "command": "cat test/input/array.jsonl | JSON_OUTPUT=jsonl json",
+            "expected": "{\"id\":1,\"name\":\"Item 1\",\"value\":100}\n{\"id\":2,\"name\":\"Item 2\",\"value\":200}\n{\"id\":3,\"name\":\"Item 3\",\"value\":300}"
         }
     ]
 }

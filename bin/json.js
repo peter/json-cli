@@ -50,7 +50,15 @@ if (process.env.JSON_HELPERS_PATH) {
 
 const { diff } = require("object-diffy");
 const { colorize } = require("json-colorizer");
-const stringify = require('fast-json-stable-stringify')
+
+const VALID_JSON_OUTPUT_TYPES = [
+  "stringify_stable",
+  "stringify_default",
+  "stringify_stable_pretty",
+  "stringify_default_pretty",
+  "raw",
+  "jsonl"
+]
 
 function getCodeArg() {
     let code = process.argv[2] || "data"
@@ -156,19 +164,19 @@ async function jsonIn(filePath) {
       }
     }
 }
-  
+
 function printJsonLines(data) {
   for (const line of data) {
-    console.log(stringify(line));
+    console.log(jsonStringify(line));
   }
 }
 
 function printJson(data) {
-    console.log(stringify(data))
+    console.log(jsonStringify(data))
 }
 
-function printPrettyJson(data) {
-    console.log(colorize(stringify(data, null, 4)))
+function printPrettyJson(data, stringifier = "stable") {
+    console.log(colorize(jsonStringify(data, stringifier)))
 }
 
 async function main() {
@@ -178,15 +186,22 @@ async function main() {
     const data = await jsonIn(filePath)
   
     const processedData = eval(code)
-  
-    if (process.env.RAW === "true" || (process.env.RAW !== "false" && ["string", "number", "boolean"].includes(typeof processedData))) {
+
+    const JSON_OUTPUT = process.env.JSON_OUTPUT || "stringify_stable_pretty"
+    if (!VALID_JSON_OUTPUT_TYPES.includes(JSON_OUTPUT)) {
+      throw new Error(`Invalid JSON output type: ${JSON_OUTPUT}, must be one of: ${VALID_JSON_OUTPUT_TYPES.join(", ")}`)
+    }
+    if (JSON_OUTPUT === "raw" || (["string", "number", "boolean"].includes(typeof processedData))) {
       console.log(processedData)
-    } else if (process.env.JSONL === "true" && Array.isArray(processedData)) {
+    } else if (JSON_OUTPUT === "jsonl" && Array.isArray(processedData)) {
       printJsonLines(processedData)
-    } else if (process.env.PRETTY === "false") {
+    } else if (["stringify_default", "stringify_stable"].includes(JSON_OUTPUT)) {
       printJson(processedData)
+    } else if (["stringify_default_pretty", "stringify_stable_pretty"].includes(JSON_OUTPUT)) {
+      const stringifier = JSON_OUTPUT.split("_")[1]
+      printPrettyJson(processedData, stringifier)
     } else {
-      printPrettyJson(processedData)
+      throw new Error(`Don't know how to handle JSON output type: ${JSON_OUTPUT}`)
     }
 }
   
