@@ -21,6 +21,7 @@ Environment variables for configuration:
 * `JSON_OUTPUT` - determines how output is serialized and the default value is `json_pretty`. Valid values are: `json`, `json_pretty`, `raw`, `jsonl`
 * `JSON_STRINGIFIER` - what function/library is used to stringify. The default value is `stable` and this means the `fast-json-stable-stringify` library is used to yield stable/sorted output but this can be changed to `JSON.stringify` by setting `JSON_STRINGIFIER=default`
 * `JSON_HELPERS_PATH` - path to a JavaScript file that exports custom helper functions
+* `JSON_DEBUG` - enable debug logging by setting `JSON_DEBUG=true`
 
 Get the value at a path:
 
@@ -210,6 +211,47 @@ echo '{"values1": [1, 2, 3, 4], "values2": [3, 5, 1, 11]}' | JSON_HELPERS_PATH="
 npm install
 npm link
 npm test
+```
+
+## Testing with a Fairly Large Log File
+
+```sh
+aws logs tail "/ecs/redshift-stats-api" --region eu-west-1 --since 24h > ~/tmp/stats-api-logs-24h.log
+du -sh ~/tmp/stats-api-logs-24h.log
+# 260M
+wc -l ~/tmp/stats-api-logs-24h.log 
+# 159909
+cat ~/tmp/stats-api-logs-24h.log | JSON_DEBUG=true bin/json.js 
+# Error thrown parsing line: 2026-02-23T07:00:50.227000+00:00...
+cat ~/tmp/stats-api-logs-24h.log | bin/json.js '.filter(l => l._lineError)' | bin/json.js .length
+# 1
+cat ~/tmp/stats-api-logs-24h.log | bin/json.js .length
+# 159909
+cat ~/tmp/stats-api-logs-24h.log | bin/json.js ".filter(l => l.message?.startsWith('Request completed'))" | bin/json.js .length
+# 52036
+cat ~/tmp/stats-api-logs-24h.log | bin/json.js ".filter(l => l.message?.startsWith('Request completed'))" | bin/json.js ".map(l => l.elapsedMs)" | bin/json.js 'stats(data)'
+# {
+#   "avg": 832.9978092090091,
+#   "count": 52036,
+#   "max": 34356,
+#   "min": 0,
+#   "p1": 6,
+#   "p10": 240.5,
+#   "p20": 307,
+#   "p30": 339,
+#   "p40": 366,
+#   "p5": 163,
+#   "p50": 405,
+#   "p60": 457,
+#   "p70": 537,
+#   "p80": 651,
+#   "p90": 980,
+#   "p95": 1411,
+#   "p99": 15266.65000000006,
+#   "p999": 27161.019999999902,
+#   "stdDev": 2409.9373583352394,
+#   "sum": 43345874
+# }
 ```
 
 ## Publishing a new Version

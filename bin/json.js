@@ -82,6 +82,12 @@ const USAGE_TEXT = `
       echo '{"values1": [1, 2, 3, 4], "values2": [3, 5, 1, 11]}' | JSON_HELPERS_PATH="$(pwd)/test/custom-helpers.js" json 'correlation(data.values1, data.values2)'
 `
 
+function debugLog(message) {
+  if (process.env.JSON_DEBUG === "true") {
+    console.log(message)
+  }
+}
+
 function getCodeArg(args) {
     let code = args[0] || "data"
     // Support jq like dot syntax
@@ -123,7 +129,7 @@ function parseLine(line, openLines) {
   } catch (err) {
     result.error = `Error thrown parsing line: ${line} - ${err.stack}`;
     result.openLines = [];
-    result.parsedLine = { _line: line };
+    result.parsedLine = { _line: line, _lineError: `Error thrown parsing line - ${err.stack}` };
   }
   return result;
 }
@@ -149,7 +155,7 @@ async function jsonIn(filePath) {
           lineCount += 1
           const result = parseLine(line, openLines)
           if (result.error) {
-            console.log(error)
+            debugLog(result.error)
             nErrors += 1
           }
           if (result.parsedLine) lines.push(result.parsedLine)
@@ -175,8 +181,8 @@ async function jsonIn(filePath) {
           }
         }
         if (nErrors > 0)
-          console.log(
-            `Failed to parse ${nErrors}/${textLines.length} lines due to errors`
+          debugLog(
+            `Failed to parse ${nErrors} lines due to errors`
           )
         return lines
       } catch (linesErr) {
