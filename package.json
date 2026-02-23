@@ -4,7 +4,9 @@
   "description": "A convenient way to work with JSON using JavaScript in the terminal",
   "main": "index.js",
   "scripts": {
-    "test": "./test/run.js"
+    "test:unit": "node --test src/*.test.js",
+    "test:integration": "./test/run.js",
+    "test": "npm run test:unit && npm run test:integration"
   },
   "repository": {
     "type": "git",
