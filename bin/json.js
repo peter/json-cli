@@ -78,7 +78,7 @@ const USAGE_TEXT = `
       cat test/input/basic.json | JSON_OUTPUT=json json
       cat test/input/array.json | JSON_OUTPUT=jsonl json 
       cat test/input/array.jsonl | json
-      cat test/input/log-with-json.log | json
+      cat test/input/log-with-json | json
       echo '{"values1": [1, 2, 3, 4], "values2": [3, 5, 1, 11]}' | JSON_HELPERS_PATH="$(pwd)/test/custom-helpers.js" json 'correlation(data.values1, data.values2)'
 `
 

@@ -180,7 +180,7 @@ cat test/input/array.jsonl | json
 The json command can also parse JSON data at the end of log lines:
 
 ```sh
-cat test/input/log-with-json.log | json
+cat test/input/log-with-json | json
 # [
 #   {
 #     "_line": "192.168.1.1 - - [21/Feb/2026:10:00:01 +0000] \"GET /api/users HTTP/1.1\" 200 ",

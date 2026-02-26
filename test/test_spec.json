@@ -62,7 +62,7 @@
         },
         {
             "name": "log_with_json_input",
-            "command": "cat test/input/log-with-json.log | bin/json.js 'sum(data.map(d => d.duration_ms))'",
+            "command": "cat test/input/log-with-json | bin/json.js 'sum(data.map(d => d.duration_ms))'",
             "expected": "141"
         },
         {
